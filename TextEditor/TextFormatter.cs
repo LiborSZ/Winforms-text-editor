@@ -16,17 +16,12 @@ namespace TextEditor
         /// Text value after text is formatted
         /// </summary>
         public string FormattedText { get; private set; }
-        /// <summary>
-        /// File handler instance
-        /// </summary>
-        private FileHandler _fileHandler;
 
         /// <summary>
         /// Constructor - inicialize file handler and text properties
         /// </summary>
         public TextFormatter()
         {
-            _fileHandler = new FileHandler();
             Text = "";
             FormattedText = "";
         }
@@ -42,13 +37,14 @@ namespace TextEditor
             errorMessage = string.Empty;
             try
             {
-                Text = _fileHandler.Read(fileName);
+                Text = FileHandler.Read(fileName);
                 FormattedText = Text;
                 return true;
             }
             catch (Exception e)
             {
                 errorMessage = e.Message;
+                FormattedText = string.Empty;
                 return false;
             }
             
@@ -62,10 +58,10 @@ namespace TextEditor
         /// <returns></returns>
         public bool WriteTextFile(string fileName, out string errorMessage)
         {
-            errorMessage = string.Empty;
+            errorMessage = "";
             try
             {
-                _fileHandler.Write(fileName, FormattedText);
+                FileHandler.Write(fileName, FormattedText);
                 return true;
             }
             catch (Exception e)
