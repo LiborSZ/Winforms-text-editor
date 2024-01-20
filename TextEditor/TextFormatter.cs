@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Globalization;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace TextEditor
 {
@@ -22,55 +19,126 @@ namespace TextEditor
         /// </summary>
         public TextFormatter()
         {
-            Text = "";
-            FormattedText = "";
+            Text = string.Empty;
+            FormattedText = string.Empty;
         }
 
         /// <summary>
-        /// Method calls read from file, if fails returns error message
+        /// Removes all empty rows from file text
         /// </summary>
-        /// <param name="fileName">Read file name</param>
-        /// <param name="errorMessage">Fail reason</param>
-        /// <returns></returns>
-        public bool ReadTextFile(string fileName, out string errorMessage)
+        public void RemoveEmptyRows()
         {
-            errorMessage = string.Empty;
-            try
+            // split string by lines
+            string[] lines = Text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+            StringBuilder sbReturn = new StringBuilder(Text.Length);
+
+            // append lines back
+            foreach (string line in lines)
             {
-                Text = FileHandler.Read(fileName);
-                FormattedText = Text;
-                return true;
+                sbReturn.AppendLine(line);
             }
-            catch (Exception e)
-            {
-                errorMessage = e.Message;
-                FormattedText = string.Empty;
-                return false;
-            }
-            
+
+            FormattedText = sbReturn.ToString();
         }
 
         /// <summary>
-        /// Method calls write to file, if fails returns error message
+        /// Removes diacritic from text
         /// </summary>
-        /// <param name="fileName">Write file name</param>
-        /// <param name="errorMessage">Fail reason</param>
-        /// <returns></returns>
-        public bool WriteTextFile(string fileName, out string errorMessage)
+        public void RemoveDiacritic()
         {
-            errorMessage = "";
-            try
+            StringBuilder sbReturn = new StringBuilder();
+            char[] arrayText = Text.Normalize(NormalizationForm.FormD).ToCharArray();
+            foreach (char letter in arrayText)
             {
-                FileHandler.Write(fileName, FormattedText);
-                return true;
+                if (CharUnicodeInfo.GetUnicodeCategory(letter) != UnicodeCategory.NonSpacingMark)
+                    sbReturn.Append(letter);
             }
-            catch (Exception e)
-            {
-                errorMessage = e.Message;
-                return false;
-                
-            }
-            
+            FormattedText = sbReturn.ToString();
+
         }
-    }        
+
+        /// <summary>
+        /// Removes all empty spaces, punction and transform text into CamelCase notation
+        /// </summary>
+        public void RemoveSpacesAndPunctuation()
+        {
+            // Removes punctuation and split text by space
+            string[] splittedText = new string(Text.Where(c => !char.IsPunctuation(c)).ToArray()).Split(new string[] { " " }, StringSplitOptions.None);
+
+            var sb = new StringBuilder();
+
+            // Iterrates splitted text and append with first char of every word upper
+            for (int i = 0; i < splittedText.Length; i++)
+            {
+                if (!string.IsNullOrEmpty(splittedText[i]))
+                {
+                    sb.Append(splittedText[i][0].ToString().ToUpper() + splittedText[i].Substring(1));
+                }
+                else
+                {
+                    sb.Append("\n");
+                }
+            }
+
+            FormattedText = sb.ToString();
+        }
+
+        /// <summary>
+        /// Counts all words in text from file
+        /// </summary>
+        /// <returns></returns>
+        public int GetWordsCount()
+        {
+            return FormattedText.Split(new char[] { '.', ' ' }, StringSplitOptions.RemoveEmptyEntries).Length;
+        }
+
+        /// <summary>
+        /// Counts all rows in text from file
+        /// </summary>
+        /// <returns></returns>
+        public int GetRowsCount()
+        {
+            return string.IsNullOrEmpty(FormattedText) ? 0 : FormattedText.Split(Environment.NewLine).Length;
+        }
+
+        /// <summary>
+        /// Counts all sentences in text from file
+        /// </summary>
+        /// <returns></returns>
+        public int GetSentencesCount()
+        {
+            return FormattedText.Split(new char[] { '.', '?', '!' }, StringSplitOptions.RemoveEmptyEntries).Length;
+        }
+
+        /// <summary>
+        /// Counts all chars in text from file
+        /// </summary>
+        /// <returns></returns>
+        public int GetCharsCount()
+        {
+            var charsLenght = FormattedText.Select(s => s).ToList().Count;
+            return charsLenght;
+        }
+
+        /// <summary>
+        /// Sets properties Text and FormattedText to imported file text
+        /// </summary>
+        /// <param name="text"></param>
+        public void SetText(string text)
+        {
+            Text = text;
+            FormattedText = text;
+        }
+
+        /// <summary>
+        /// Return formatted text
+        /// </summary>
+        /// <returns></returns>
+        public string GetFormattedText()
+        {
+            return FormattedText;
+        }
+
+    }
 }
