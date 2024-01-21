@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.importOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.sentenceLabel = new System.Windows.Forms.Label();
             this.wordLabel = new System.Windows.Forms.Label();
             this.charLabel = new System.Windows.Forms.Label();
@@ -49,18 +49,18 @@
             this.fileBrowseButton = new System.Windows.Forms.Button();
             this.statusLabel = new System.Windows.Forms.Label();
             this.importExportProgressBar = new System.Windows.Forms.ProgressBar();
-            this.exportSaveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.SaveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.counterLabelsGroupBox = new System.Windows.Forms.GroupBox();
             this.progressBarLabel = new System.Windows.Forms.Label();
             this.counterLabelsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
-            // importOpenFileDialog
+            // OpenFileDialog
             // 
-            this.importOpenFileDialog.DefaultExt = "txt";
-            this.importOpenFileDialog.FileName = "openFileDialog1";
-            this.importOpenFileDialog.InitialDirectory = "Environment.GetFolderPath(Environment.SpecialFolder.Desktop)";
-            this.importOpenFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.ImportOpenFileDialog_FileOk);
+            this.OpenFileDialog.DefaultExt = "txt";
+            this.OpenFileDialog.Filter = "\"txt files (*.txt)|*.txt;";
+            this.OpenFileDialog.InitialDirectory = "Environment.GetFolderPath(Environment.SpecialFolder.Desktop)";
+            this.OpenFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.ImportOpenFileDialog_FileOk);
             // 
             // sentenceLabel
             // 
@@ -248,10 +248,12 @@
             this.importExportProgressBar.Size = new System.Drawing.Size(587, 23);
             this.importExportProgressBar.TabIndex = 19;
             // 
-            // exportSaveFileDialog
+            // SaveFileDialog
             // 
-            this.exportSaveFileDialog.DefaultExt = "txt";
-            this.exportSaveFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.ExportSaveFileDialog_FileOk);
+            this.SaveFileDialog.DefaultExt = "txt";
+            this.SaveFileDialog.FileName = "TextFile";
+            this.SaveFileDialog.Filter = "\"txt files (*.txt)|*.txt|All files (*.*)|*.*\";";
+            this.SaveFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.ExportSaveFileDialog_FileOk);
             // 
             // counterLabelsGroupBox
             // 
@@ -316,7 +318,7 @@
 
         #endregion
 
-        private OpenFileDialog importOpenFileDialog;
+        private OpenFileDialog OpenFileDialog;
         private Label sentenceLabel;
         private Label wordLabel;
         private Label charLabel;
@@ -337,7 +339,7 @@
         private Button fileBrowseButton;
         private Label statusLabel;
         private ProgressBar importExportProgressBar;
-        private SaveFileDialog exportSaveFileDialog;
+        private SaveFileDialog SaveFileDialog;
         private GroupBox counterLabelsGroupBox;
         private Label progressBarLabel;
     }

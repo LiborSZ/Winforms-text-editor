@@ -3,7 +3,7 @@ namespace TextEditor
     public partial class StatisticForm : Form
     {
         private TextFormatter formatter;
-        private CancellationTokenSource cts;
+        private CancellationTokenSource? cts;
         public string FileText { get; set; }
 
         public StatisticForm()
@@ -11,20 +11,29 @@ namespace TextEditor
             InitializeComponent();
 
             formatter = new TextFormatter();
-            cts = new CancellationTokenSource();
+            cts = null;
 
-            FileHandler.ProgressChanged += FileHandler_ProgressChanged; // progressbar event
+            // Events bounds to progress bar
+            FileHandler.ProgressChanged += ProgressBar_ProgressChanged; 
+            TextFormatter.ProgressChanged += ProgressBar_ProgressChanged;
 
-            // label and button setting inicialization
+            // labels and buttons setting inicialization
+            SetActionButtonsState(false);
+            saveFileButton.Enabled = false;
             FileText = string.Empty;
             cancelButton.Enabled = false;
             statusLabel.Visible = false;
-            saveFileButton.Enabled = false;
+
 
         }
 
-        // ProgressBar updater
-        private void FileHandler_ProgressChanged(int progress)
+        //// Private methods ////
+
+        /// <summary>
+        /// Progress bar update callback
+        /// </summary>
+        /// <param name="progress"></param>
+        private void ProgressBar_ProgressChanged(int progress)
         {
             importExportProgressBar.Invoke(new Action(() =>
             {
@@ -33,7 +42,9 @@ namespace TextEditor
             }));
         }
 
-        // Statistic labels updater
+        /// <summary>
+        /// Updates statistic labels
+        /// </summary>
         private void UpdateCounterLabels()
         {
             sentenceCounter.Text = formatter.GetSentencesCount().ToString();
@@ -42,12 +53,25 @@ namespace TextEditor
             charCounter.Text = formatter.GetCharsCount().ToString();
         }
 
-        /// Export Import dialogs controlls
+        /// <summary>
+        /// Sets action buttons to disabled or enabled state
+        /// </summary>
+        /// <param name="enabled"></param>
+        private void SetActionButtonsState(bool enabled)
+        {
+            removeDiacriticButton.Enabled = enabled;
+            removeEmptyRowsButton.Enabled = enabled;
+            removeSpacesPuncButton.Enabled = enabled;
+        }
 
-        // Calls fileHandler to read from file and sets labels
+
+
+        //// Export Import dialogs controlls ////
+
+        // Calls fileHandler to read from file and sets labels and buttons
         private async void ImportOpenFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            importPathTextBox.Text = importOpenFileDialog.FileName;
+            importPathTextBox.Text = OpenFileDialog.FileName;
 
             cts = new CancellationTokenSource();
 
@@ -59,8 +83,9 @@ namespace TextEditor
                 statusLabel.ForeColor = Color.Black;
                 statusLabel.Text = "Nahrávání...";
 
-                FileText = await FileHandler.ReadAsync(importOpenFileDialog.FileName, cts.Token);
+                FileText = await FileHandler.ReadAsync(OpenFileDialog.FileName, cts.Token);
                 formatter.SetText(FileText);
+                SetActionButtonsState(true);
                 saveFileButton.Enabled = true;
                 statusLabel.ForeColor = Color.Green;
                 statusLabel.Text = "Soubor v poøádku nahrán!";
@@ -70,12 +95,14 @@ namespace TextEditor
                 statusLabel.ForeColor = Color.Red;
                 statusLabel.Text = "Operace byla zrušena.";
                 saveFileButton.Enabled = false;
+                SetActionButtonsState(false);
             }
             catch (Exception ex)
             {
                 statusLabel.ForeColor = Color.Red;
                 statusLabel.Text = ex.Message;
                 saveFileButton.Enabled = false;
+                SetActionButtonsState(false);
             }
             finally
             {
@@ -99,8 +126,9 @@ namespace TextEditor
                 statusLabel.ForeColor = Color.Black;
                 statusLabel.Text = "Ukládání...";
 
-                await FileHandler.WriteAsync(exportSaveFileDialog.FileName, formatter.GetFormattedText(), importExportProgressBar, progressBarLabel);
+                await FileHandler.WriteAsync(SaveFileDialog.FileName, formatter.GetFormattedText(), importExportProgressBar, progressBarLabel);
 
+                SetActionButtonsState(true);
                 statusLabel.ForeColor = Color.Green;
                 statusLabel.Text = "Soubor v poøádku uložen!";
             }
@@ -108,11 +136,13 @@ namespace TextEditor
             {
                 statusLabel.ForeColor = Color.Red;
                 statusLabel.Text = "Operace byla zrušena.";
+                SetActionButtonsState(false);
             }
             catch (Exception ex)
             {
                 statusLabel.ForeColor = Color.Red;
                 statusLabel.Text = ex.Message;
+                SetActionButtonsState(false);
             }
             finally
             {
@@ -121,18 +151,52 @@ namespace TextEditor
             }
         }
 
-        /// Action buttons
+        //// Action buttons ////
 
-        private void RemoveEmptyRowsButton_Click(object sender, EventArgs e)
+        // Calls removeEmptyRows asynchronously and sets / update labels and buttons in try-catch
+        private async void RemoveEmptyRowsButton_Click(object sender, EventArgs e)
         {
-            formatter.RemoveEmptyRows();
-            UpdateCounterLabels();
+            cts = new CancellationTokenSource();
+            try
+            {
+                statusLabel.Visible = true;
+                cancelButton.Enabled = true;
+
+                statusLabel.ForeColor = Color.Black;
+                statusLabel.Text = "Odstraòuji prázdné øádky...";
+                await Task.Run(() => formatter.RemoveEmptyRows(cts.Token));
+                SetActionButtonsState(true);
+                statusLabel.ForeColor = Color.Green;
+                statusLabel.Text = "Prázdné øádky odstranìny!";
+
+            }
+            catch (OperationCanceledException)
+            {
+
+                statusLabel.ForeColor = Color.Red;
+                statusLabel.Text = "Operace byla zrušena!";
+                SetActionButtonsState(false);
+            }
+            catch (Exception ex)
+            {
+                statusLabel.ForeColor = Color.Red;
+                statusLabel.Text = ex.Message;
+                SetActionButtonsState(false);
+            }
+            finally
+            {
+                cts.Dispose();
+                cancelButton.Enabled = false;
+                UpdateCounterLabels();
+
+            }
         }
 
+        //Update text to original text from loaded file or asynchronously reads and sets / update labels and buttons in try-catch
         private async void CopyButton_Click(object sender, EventArgs e)
         {
             // If text exists and path to file is same as imported text path then just sets text to original, else reads text from file if file exists
-            if (!string.IsNullOrEmpty(formatter.Text) && importOpenFileDialog.FileName == importPathTextBox.Text)
+            if (!string.IsNullOrEmpty(formatter.Text) && OpenFileDialog.FileName == importPathTextBox.Text)
             {
                 formatter.CopyImportedText();
 
@@ -151,8 +215,16 @@ namespace TextEditor
                     statusLabel.ForeColor = Color.Black;
                     statusLabel.Text = "Nahrávání...";
 
+                    string extension = Path.GetExtension(importPathTextBox.Text);
+
+                    if (extension != ".txt")
+                    {
+                        throw new Exception("Nepodporovaný formát. Program podporuje pouze textový soubor");
+                    }
+
                     FileText = await FileHandler.ReadAsync(importPathTextBox.Text, cts.Token);
                     formatter.SetText(FileText);
+                    SetActionButtonsState(true);
                     saveFileButton.Enabled = true;
 
                     statusLabel.ForeColor = Color.Green;
@@ -162,6 +234,7 @@ namespace TextEditor
                 {
                     statusLabel.ForeColor = Color.Red;
                     statusLabel.Text = "Operace byla zrušena!";
+                    SetActionButtonsState(false);
                 }
                 catch (Exception ex)
                 {
@@ -169,6 +242,7 @@ namespace TextEditor
                     statusLabel.Text = ex.Message;
                     formatter.SetText(string.Empty);
                     saveFileButton.Enabled = false;
+                    SetActionButtonsState(false);
                 }
                 finally
                 {
@@ -180,19 +254,83 @@ namespace TextEditor
             UpdateCounterLabels();
 
         }
-        private void RemoveDiacriticButton_Click(object sender, EventArgs e)
+
+        // Calls RemoveDiacritic asynchronously and sets / update labels and buttons in try-catch
+        private async void RemoveDiacriticButton_Click(object sender, EventArgs e)
         {
-            formatter.RemoveDiacritic();
+            cts = new CancellationTokenSource();
+            try
+            {
+                statusLabel.Visible = true;
+                cancelButton.Enabled = true;
+
+                statusLabel.ForeColor = Color.Black;
+                statusLabel.Text = "Odstraòuji diakritiku...";
+                await Task.Run(() => formatter.RemoveDiacritic(cts.Token));
+                SetActionButtonsState(true);
+                statusLabel.ForeColor = Color.Green;
+                statusLabel.Text = "Diakritika odstranìna!";
+
+            }
+            catch (OperationCanceledException)
+            {
+
+                statusLabel.ForeColor = Color.Red;
+                statusLabel.Text = "Operace byla zrušena!";
+                SetActionButtonsState(false);
+            }
+            catch (Exception ex)
+            {
+                statusLabel.ForeColor = Color.Red;
+                statusLabel.Text = ex.Message;
+                SetActionButtonsState(false);
+            }
+            finally
+            {
+                cts.Dispose();
+                cancelButton.Enabled = false;
+            }
             UpdateCounterLabels();
         }
 
-        private void RemoveSpacesPuncButton_Click(object sender, EventArgs e)
+        // Calls RemoveSpacesAndPunctuation asynchronously and sets / update labels and buttons in try-catch
+        private async void RemoveSpacesPuncButton_Click(object sender, EventArgs e)
         {
-            formatter.RemoveSpacesAndPunctuation();
+            cts = new CancellationTokenSource();
+            try
+            {
+                statusLabel.Visible = true;
+                cancelButton.Enabled = true;
+
+                statusLabel.ForeColor = Color.Black;
+                statusLabel.Text = "Odstraòuji mezery a interpunkci, implementuji CamelCase notaci na slova...";
+                await Task.Run(() => formatter.RemoveSpacesAndPunctuation(cts.Token));
+                SetActionButtonsState(true);
+                statusLabel.ForeColor = Color.Green;
+                statusLabel.Text = "Mezery a interpunkce odstranìna a slova pøetransformována na CamelCase!";
+
+            }
+            catch (OperationCanceledException)
+            {
+                statusLabel.ForeColor = Color.Red;
+                statusLabel.Text = "Operace byla zrušena!";
+                SetActionButtonsState(false);
+            }
+            catch (Exception ex)
+            {
+                statusLabel.ForeColor = Color.Red;
+                statusLabel.Text = ex.Message;
+                SetActionButtonsState(false);
+            }
+            finally
+            {
+                cts.Dispose();
+                cancelButton.Enabled = false;
+            }
             UpdateCounterLabels();
         }
 
-        /// Form buttons
+        //// Form controll buttons ////
 
         // Cancels actual process and sets progress bar to 0
         private void CancelButton_Click(object sender, EventArgs e)
@@ -206,26 +344,29 @@ namespace TextEditor
                 statusLabel.Text = "Žádný proces";
             }
 
+            // Process was cancelled, set progressBar to 0
             importExportProgressBar.Value = 0;
             progressBarLabel.Text = "0%";
         }
 
-        // Close form (and app)
+        // Removing events and close form
         private void CloseButton_Click(object sender, EventArgs e)
         {
+            FileHandler.ProgressChanged -= ProgressBar_ProgressChanged;
+            TextFormatter.ProgressChanged -= ProgressBar_ProgressChanged;
             Close();
         }
 
-        // Save dialog 
+        // Export dialog 
         private void SaveFileButton_Click(object sender, EventArgs e)
         {
-            exportSaveFileDialog.ShowDialog();
+            SaveFileDialog.ShowDialog();
         }
 
         // import dialog
         private void FileBrowseButton_Click(object sender, EventArgs e)
         {
-            importOpenFileDialog.ShowDialog();
+            OpenFileDialog.ShowDialog();
         }
     }
 }
