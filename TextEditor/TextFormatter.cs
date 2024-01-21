@@ -8,17 +8,14 @@ namespace TextEditor
         public delegate void ProgressChangedEventHandler(int progress);
         public static event ProgressChangedEventHandler? ProgressChanged;
         /// <summary>
-        /// Text value from readed file
+        /// Original text read from file
         /// </summary>
         public string Text { get; private set; }
         /// <summary>
-        /// Text value after text is formatted
+        /// Text to save
         /// </summary>
         public string FormattedText { get; private set; }
 
-        /// <summary>
-        /// Constructor - inicialize file handler and text properties
-        /// </summary>
         public TextFormatter()
         {
             Text = string.Empty;
@@ -26,8 +23,9 @@ namespace TextEditor
         }
 
         /// <summary>
-        /// Removes all empty rows from file text
+        /// 
         /// </summary>
+        /// <param name="cancellationToken">indicates if cancel button was clicked</param>
         public void RemoveEmptyRows(CancellationToken cancellationToken)
         {
             // split string by lines
@@ -39,6 +37,9 @@ namespace TextEditor
             // append lines back
             foreach (string line in lines)
             {
+                // Kontrola, zda byla operace zrušena
+                cancellationToken.ThrowIfCancellationRequested();
+
                 sbReturn.AppendLine(line);
 
                 currentLength++;
@@ -68,6 +69,7 @@ namespace TextEditor
             {
                 // Kontrola, zda byla operace zrušena
                 cancellationToken.ThrowIfCancellationRequested();
+
                 if (CharUnicodeInfo.GetUnicodeCategory(letter) != UnicodeCategory.NonSpacingMark)
                 {
                     sbReturn.Append(letter);
@@ -106,6 +108,9 @@ namespace TextEditor
                 // Iterrates splitted text and append with first char of every word upper
                 for (int i = 0; i < splittedText.Length; i++)
                 {
+                    // Kontrola, zda byla operace zrušena
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     if (!string.IsNullOrEmpty(splittedText[i]))
                     {
                         sb.Append(splittedText[i][0].ToString().ToUpper() + splittedText[i].Substring(1));

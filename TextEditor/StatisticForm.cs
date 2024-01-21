@@ -83,7 +83,20 @@ namespace TextEditor
                 statusLabel.ForeColor = Color.Black;
                 statusLabel.Text = "Nahrávání...";
 
-                FileText = await FileHandler.ReadAsync(OpenFileDialog.FileName, cts.Token);
+                string fileName = OpenFileDialog.FileName;
+
+                string extension = Path.GetExtension(fileName);
+
+                if (!File.Exists(fileName) || string.IsNullOrEmpty(fileName))
+                {
+                    throw new Exception("Neplatná cesta k souboru!");
+                }
+                else if (extension != ".txt")
+                {
+                    throw new Exception("Nepodporovaný formát! Program podporuje pouze textový soubor.");
+                }
+
+                FileText = await FileHandler.ReadAsync(fileName, cts.Token);
                 formatter.SetText(FileText);
                 SetActionButtonsState(true);
                 saveFileButton.Enabled = true;
@@ -125,6 +138,15 @@ namespace TextEditor
 
                 statusLabel.ForeColor = Color.Black;
                 statusLabel.Text = "Ukládání...";
+
+                string fileName = SaveFileDialog.FileName;
+
+                string extension = Path.GetExtension(fileName);
+
+                if (extension != ".txt")
+                {
+                    throw new Exception("Nepodporovaný formát! Program podporuje pouze textový soubor.");
+                }
 
                 await FileHandler.WriteAsync(SaveFileDialog.FileName, formatter.GetFormattedText(), importExportProgressBar, progressBarLabel);
 
@@ -200,6 +222,7 @@ namespace TextEditor
             {
                 formatter.CopyImportedText();
 
+                SetActionButtonsState(true);
                 statusLabel.ForeColor = Color.Green;
                 statusLabel.Text = "Soubor pøekopírován!";
             }
@@ -215,14 +238,21 @@ namespace TextEditor
                     statusLabel.ForeColor = Color.Black;
                     statusLabel.Text = "Nahrávání...";
 
-                    string extension = Path.GetExtension(importPathTextBox.Text);
+                    string filePath = importPathTextBox.Text;
 
-                    if (extension != ".txt")
+                    string extension = Path.GetExtension(filePath);
+
+                    if (!File.Exists(filePath) || string.IsNullOrEmpty(filePath))
                     {
-                        throw new Exception("Nepodporovaný formát. Program podporuje pouze textový soubor");
+                        throw new Exception("Neplatná cesta k souboru!");
+                    }
+                    else if (extension != ".txt")
+                    {
+                        throw new Exception("Nepodporovaný formát! Program podporuje pouze textový soubor.");
                     }
 
-                    FileText = await FileHandler.ReadAsync(importPathTextBox.Text, cts.Token);
+
+                    FileText = await FileHandler.ReadAsync(filePath, cts.Token);
                     formatter.SetText(FileText);
                     SetActionButtonsState(true);
                     saveFileButton.Enabled = true;
