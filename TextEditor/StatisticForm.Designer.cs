@@ -29,46 +29,47 @@
         private void InitializeComponent()
         {
             this.importOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.SentenceLabel = new System.Windows.Forms.Label();
+            this.sentenceLabel = new System.Windows.Forms.Label();
             this.wordLabel = new System.Windows.Forms.Label();
             this.charLabel = new System.Windows.Forms.Label();
             this.rowLabel = new System.Windows.Forms.Label();
-            this.SentenceCounter = new System.Windows.Forms.Label();
+            this.sentenceCounter = new System.Windows.Forms.Label();
             this.wordCounter = new System.Windows.Forms.Label();
             this.charCounter = new System.Windows.Forms.Label();
             this.rowCounter = new System.Windows.Forms.Label();
-            this.CopyButton = new System.Windows.Forms.Button();
+            this.copyButton = new System.Windows.Forms.Button();
             this.removeDiacriticButton = new System.Windows.Forms.Button();
             this.removeEmptyRowsButton = new System.Windows.Forms.Button();
             this.removeSpacesPuncButton = new System.Windows.Forms.Button();
-            this.SaveFileButton = new System.Windows.Forms.Button();
+            this.saveFileButton = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.importPathTextBox = new System.Windows.Forms.TextBox();
             this.importPathLabel = new System.Windows.Forms.Label();
-            this.FileBrowseButton = new System.Windows.Forms.Button();
-            this.StatusLabel = new System.Windows.Forms.Label();
-            this.ImportExportProgressBar = new System.Windows.Forms.ProgressBar();
+            this.fileBrowseButton = new System.Windows.Forms.Button();
+            this.statusLabel = new System.Windows.Forms.Label();
+            this.importExportProgressBar = new System.Windows.Forms.ProgressBar();
             this.exportSaveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.counterLabelsGroupBox = new System.Windows.Forms.GroupBox();
-            this.ProgressBarLabel = new System.Windows.Forms.Label();
+            this.progressBarLabel = new System.Windows.Forms.Label();
             this.counterLabelsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // importOpenFileDialog
             // 
+            this.importOpenFileDialog.DefaultExt = "txt";
             this.importOpenFileDialog.FileName = "openFileDialog1";
             this.importOpenFileDialog.InitialDirectory = "Environment.GetFolderPath(Environment.SpecialFolder.Desktop)";
             this.importOpenFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.ImportOpenFileDialog_FileOk);
             // 
-            // SentenceLabel
+            // sentenceLabel
             // 
-            this.SentenceLabel.AutoSize = true;
-            this.SentenceLabel.Location = new System.Drawing.Point(21, 31);
-            this.SentenceLabel.Name = "SentenceLabel";
-            this.SentenceLabel.Size = new System.Drawing.Size(59, 15);
-            this.SentenceLabel.TabIndex = 0;
-            this.SentenceLabel.Text = "Počet vět:";
+            this.sentenceLabel.AutoSize = true;
+            this.sentenceLabel.Location = new System.Drawing.Point(21, 31);
+            this.sentenceLabel.Name = "sentenceLabel";
+            this.sentenceLabel.Size = new System.Drawing.Size(59, 15);
+            this.sentenceLabel.TabIndex = 0;
+            this.sentenceLabel.Text = "Počet vět:";
             // 
             // wordLabel
             // 
@@ -97,14 +98,14 @@
             this.rowLabel.TabIndex = 3;
             this.rowLabel.Text = "Počet řádků:";
             // 
-            // SentenceCounter
+            // sentenceCounter
             // 
-            this.SentenceCounter.AutoSize = true;
-            this.SentenceCounter.Location = new System.Drawing.Point(105, 31);
-            this.SentenceCounter.Name = "SentenceCounter";
-            this.SentenceCounter.Size = new System.Drawing.Size(13, 15);
-            this.SentenceCounter.TabIndex = 4;
-            this.SentenceCounter.Text = "0";
+            this.sentenceCounter.AutoSize = true;
+            this.sentenceCounter.Location = new System.Drawing.Point(105, 31);
+            this.sentenceCounter.Name = "sentenceCounter";
+            this.sentenceCounter.Size = new System.Drawing.Size(13, 15);
+            this.sentenceCounter.TabIndex = 4;
+            this.sentenceCounter.Text = "0";
             // 
             // wordCounter
             // 
@@ -133,15 +134,15 @@
             this.rowCounter.TabIndex = 7;
             this.rowCounter.Text = "0";
             // 
-            // CopyButton
+            // copyButton
             // 
-            this.CopyButton.Location = new System.Drawing.Point(27, 99);
-            this.CopyButton.Name = "CopyButton";
-            this.CopyButton.Size = new System.Drawing.Size(185, 23);
-            this.CopyButton.TabIndex = 8;
-            this.CopyButton.Text = "Překopíruj";
-            this.CopyButton.UseVisualStyleBackColor = true;
-            this.CopyButton.Click += new System.EventHandler(this.CopyButton_Click);
+            this.copyButton.Location = new System.Drawing.Point(27, 99);
+            this.copyButton.Name = "copyButton";
+            this.copyButton.Size = new System.Drawing.Size(185, 23);
+            this.copyButton.TabIndex = 8;
+            this.copyButton.Text = "Překopíruj";
+            this.copyButton.UseVisualStyleBackColor = true;
+            this.copyButton.Click += new System.EventHandler(this.CopyButton_Click);
             // 
             // removeDiacriticButton
             // 
@@ -173,15 +174,15 @@
             this.removeSpacesPuncButton.UseVisualStyleBackColor = true;
             this.removeSpacesPuncButton.Click += new System.EventHandler(this.RemoveSpacesPuncButton_Click);
             // 
-            // SaveFileButton
+            // saveFileButton
             // 
-            this.SaveFileButton.Location = new System.Drawing.Point(27, 324);
-            this.SaveFileButton.Name = "SaveFileButton";
-            this.SaveFileButton.Size = new System.Drawing.Size(88, 23);
-            this.SaveFileButton.TabIndex = 12;
-            this.SaveFileButton.Text = "Uložit soubor";
-            this.SaveFileButton.UseVisualStyleBackColor = true;
-            this.SaveFileButton.Click += new System.EventHandler(this.SaveFileButton_Click);
+            this.saveFileButton.Location = new System.Drawing.Point(27, 324);
+            this.saveFileButton.Name = "saveFileButton";
+            this.saveFileButton.Size = new System.Drawing.Size(88, 23);
+            this.saveFileButton.TabIndex = 12;
+            this.saveFileButton.Text = "Uložit soubor";
+            this.saveFileButton.UseVisualStyleBackColor = true;
+            this.saveFileButton.Click += new System.EventHandler(this.SaveFileButton_Click);
             // 
             // closeButton
             // 
@@ -219,44 +220,46 @@
             this.importPathLabel.TabIndex = 16;
             this.importPathLabel.Text = "Cesta k souboru:";
             // 
-            // FileBrowseButton
+            // fileBrowseButton
             // 
-            this.FileBrowseButton.Location = new System.Drawing.Point(578, 30);
-            this.FileBrowseButton.Name = "FileBrowseButton";
-            this.FileBrowseButton.Size = new System.Drawing.Size(90, 23);
-            this.FileBrowseButton.TabIndex = 17;
-            this.FileBrowseButton.Text = "Procházet...";
-            this.FileBrowseButton.UseVisualStyleBackColor = true;
-            this.FileBrowseButton.Click += new System.EventHandler(this.FileBrowseButton_Click);
+            this.fileBrowseButton.Location = new System.Drawing.Point(578, 30);
+            this.fileBrowseButton.Name = "fileBrowseButton";
+            this.fileBrowseButton.Size = new System.Drawing.Size(90, 23);
+            this.fileBrowseButton.TabIndex = 17;
+            this.fileBrowseButton.Text = "Procházet...";
+            this.fileBrowseButton.UseVisualStyleBackColor = true;
+            this.fileBrowseButton.Click += new System.EventHandler(this.FileBrowseButton_Click);
             // 
-            // StatusLabel
+            // statusLabel
             // 
-            this.StatusLabel.AutoSize = true;
-            this.StatusLabel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.StatusLabel.Location = new System.Drawing.Point(27, 245);
-            this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(49, 19);
-            this.StatusLabel.TabIndex = 18;
-            this.StatusLabel.Text = "Status";
+            this.statusLabel.AutoSize = true;
+            this.statusLabel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.statusLabel.Location = new System.Drawing.Point(27, 274);
+            this.statusLabel.MaximumSize = new System.Drawing.Size(620, 50);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(49, 19);
+            this.statusLabel.TabIndex = 18;
+            this.statusLabel.Text = "Status";
             // 
-            // ImportExportProgressBar
+            // importExportProgressBar
             // 
-            this.ImportExportProgressBar.Location = new System.Drawing.Point(27, 276);
-            this.ImportExportProgressBar.Name = "ImportExportProgressBar";
-            this.ImportExportProgressBar.Size = new System.Drawing.Size(587, 23);
-            this.ImportExportProgressBar.TabIndex = 19;
+            this.importExportProgressBar.Location = new System.Drawing.Point(27, 245);
+            this.importExportProgressBar.Name = "importExportProgressBar";
+            this.importExportProgressBar.Size = new System.Drawing.Size(587, 23);
+            this.importExportProgressBar.TabIndex = 19;
             // 
             // exportSaveFileDialog
             // 
+            this.exportSaveFileDialog.DefaultExt = "txt";
             this.exportSaveFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.ExportSaveFileDialog_FileOk);
             // 
             // counterLabelsGroupBox
             // 
             this.counterLabelsGroupBox.Controls.Add(this.rowLabel);
-            this.counterLabelsGroupBox.Controls.Add(this.SentenceLabel);
+            this.counterLabelsGroupBox.Controls.Add(this.sentenceLabel);
             this.counterLabelsGroupBox.Controls.Add(this.wordLabel);
             this.counterLabelsGroupBox.Controls.Add(this.charLabel);
-            this.counterLabelsGroupBox.Controls.Add(this.SentenceCounter);
+            this.counterLabelsGroupBox.Controls.Add(this.sentenceCounter);
             this.counterLabelsGroupBox.Controls.Add(this.wordCounter);
             this.counterLabelsGroupBox.Controls.Add(this.charCounter);
             this.counterLabelsGroupBox.Controls.Add(this.rowCounter);
@@ -267,38 +270,43 @@
             this.counterLabelsGroupBox.TabStop = false;
             this.counterLabelsGroupBox.Text = "Statistika";
             // 
-            // ProgressBarLabel
+            // progressBarLabel
             // 
-            this.ProgressBarLabel.AutoSize = true;
-            this.ProgressBarLabel.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.ProgressBarLabel.Location = new System.Drawing.Point(620, 278);
-            this.ProgressBarLabel.Name = "ProgressBarLabel";
-            this.ProgressBarLabel.Size = new System.Drawing.Size(31, 20);
-            this.ProgressBarLabel.TabIndex = 21;
-            this.ProgressBarLabel.Text = "0%";
+            this.progressBarLabel.AutoSize = true;
+            this.progressBarLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.progressBarLabel.Location = new System.Drawing.Point(620, 246);
+            this.progressBarLabel.Name = "progressBarLabel";
+            this.progressBarLabel.Size = new System.Drawing.Size(33, 21);
+            this.progressBarLabel.TabIndex = 21;
+            this.progressBarLabel.Text = "0%";
             // 
             // StatisticForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
+            this.CancelButton = this.closeButton;
             this.ClientSize = new System.Drawing.Size(694, 358);
-            this.Controls.Add(this.ProgressBarLabel);
+            this.Controls.Add(this.progressBarLabel);
             this.Controls.Add(this.counterLabelsGroupBox);
-            this.Controls.Add(this.ImportExportProgressBar);
-            this.Controls.Add(this.StatusLabel);
-            this.Controls.Add(this.FileBrowseButton);
+            this.Controls.Add(this.importExportProgressBar);
+            this.Controls.Add(this.statusLabel);
+            this.Controls.Add(this.fileBrowseButton);
             this.Controls.Add(this.importPathLabel);
             this.Controls.Add(this.importPathTextBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.closeButton);
-            this.Controls.Add(this.SaveFileButton);
+            this.Controls.Add(this.saveFileButton);
             this.Controls.Add(this.removeSpacesPuncButton);
             this.Controls.Add(this.removeEmptyRowsButton);
             this.Controls.Add(this.removeDiacriticButton);
-            this.Controls.Add(this.CopyButton);
+            this.Controls.Add(this.copyButton);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "StatisticForm";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "Editor textu";
             this.counterLabelsGroupBox.ResumeLayout(false);
             this.counterLabelsGroupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -309,28 +317,28 @@
         #endregion
 
         private OpenFileDialog importOpenFileDialog;
-        private Label SentenceLabel;
+        private Label sentenceLabel;
         private Label wordLabel;
         private Label charLabel;
         private Label rowLabel;
-        private Label SentenceCounter;
+        private Label sentenceCounter;
         private Label wordCounter;
         private Label charCounter;
         private Label rowCounter;
-        private Button CopyButton;
+        private Button copyButton;
         private Button removeDiacriticButton;
         private Button removeEmptyRowsButton;
         private Button removeSpacesPuncButton;
-        private Button SaveFileButton;
+        private Button saveFileButton;
         private Button closeButton;
         private Button cancelButton;
         private TextBox importPathTextBox;
         private Label importPathLabel;
-        private Button FileBrowseButton;
-        private Label StatusLabel;
-        private ProgressBar ImportExportProgressBar;
+        private Button fileBrowseButton;
+        private Label statusLabel;
+        private ProgressBar importExportProgressBar;
         private SaveFileDialog exportSaveFileDialog;
         private GroupBox counterLabelsGroupBox;
-        private Label ProgressBarLabel;
+        private Label progressBarLabel;
     }
 }

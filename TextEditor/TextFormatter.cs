@@ -29,9 +29,9 @@ namespace TextEditor
         public void RemoveEmptyRows()
         {
             // split string by lines
-            string[] lines = Text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = FormattedText.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
-            StringBuilder sbReturn = new StringBuilder(Text.Length);
+            StringBuilder sbReturn = new StringBuilder(FormattedText.Length);
 
             // append lines back
             foreach (string line in lines)
@@ -48,7 +48,7 @@ namespace TextEditor
         public void RemoveDiacritic()
         {
             StringBuilder sbReturn = new StringBuilder();
-            char[] arrayText = Text.Normalize(NormalizationForm.FormD).ToCharArray();
+            char[] arrayText = FormattedText.Normalize(NormalizationForm.FormD).ToCharArray();
             foreach (char letter in arrayText)
             {
                 if (CharUnicodeInfo.GetUnicodeCategory(letter) != UnicodeCategory.NonSpacingMark)
@@ -63,25 +63,27 @@ namespace TextEditor
         /// </summary>
         public void RemoveSpacesAndPunctuation()
         {
-            // Removes punctuation and split text by space
-            string[] splittedText = new string(Text.Where(c => !char.IsPunctuation(c)).ToArray()).Split(new string[] { " " }, StringSplitOptions.None);
-
-            var sb = new StringBuilder();
-
-            // Iterrates splitted text and append with first char of every word upper
-            for (int i = 0; i < splittedText.Length; i++)
+            if (!string.IsNullOrEmpty(Text))
             {
-                if (!string.IsNullOrEmpty(splittedText[i]))
-                {
-                    sb.Append(splittedText[i][0].ToString().ToUpper() + splittedText[i].Substring(1));
-                }
-                else
-                {
-                    sb.Append("\n");
-                }
-            }
+                // Removes punctuation and split text by space
+                string[] splittedText = new string(FormattedText.Where(c => !char.IsPunctuation(c)).ToArray()).Split(new string[] { " " }, StringSplitOptions.None);
 
-            FormattedText = sb.ToString();
+                var sb = new StringBuilder();
+
+                // Iterrates splitted text and append with first char of every word upper
+                for (int i = 0; i < splittedText.Length; i++)
+                {
+                    if (!string.IsNullOrEmpty(splittedText[i]))
+                    {
+                        sb.Append(splittedText[i][0].ToString().ToUpper() + splittedText[i].Substring(1));
+                    }
+                    else
+                    {
+                        sb.Append("\n");
+                    }
+                }
+                FormattedText = sb.ToString();
+            }
         }
 
         /// <summary>
@@ -138,6 +140,14 @@ namespace TextEditor
         public string GetFormattedText()
         {
             return FormattedText;
+        }
+
+        /// <summary>
+        /// Copies original text
+        /// </summary>
+        public void CopyImportedText()
+        {
+            FormattedText = Text;
         }
 
     }
