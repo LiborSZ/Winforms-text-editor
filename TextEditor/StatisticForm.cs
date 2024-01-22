@@ -23,8 +23,6 @@ namespace TextEditor
             FileText = string.Empty;
             cancelButton.Enabled = false;
             statusLabel.Visible = false;
-
-
         }
 
         //// Private methods ////
@@ -64,7 +62,14 @@ namespace TextEditor
             removeSpacesPuncButton.Enabled = enabled;
         }
 
-
+        /// <summary>
+        /// Resets progress bar and % label to 0
+        /// </summary>
+        private void ResetProgressBarAndLabel()
+        {
+            importExportProgressBar.Value = 0;
+            progressBarLabel.Text = "0%";
+        }
 
         //// Export Import dialogs controlls ////
 
@@ -109,6 +114,7 @@ namespace TextEditor
                 statusLabel.Text = "Operace byla zrušena.";
                 saveFileButton.Enabled = false;
                 SetActionButtonsState(false);
+                ResetProgressBarAndLabel();
             }
             catch (Exception ex)
             {
@@ -116,6 +122,7 @@ namespace TextEditor
                 statusLabel.Text = ex.Message;
                 saveFileButton.Enabled = false;
                 SetActionButtonsState(false);
+                ResetProgressBarAndLabel();
             }
             finally
             {
@@ -150,26 +157,26 @@ namespace TextEditor
 
                 await FileHandler.WriteAsync(SaveFileDialog.FileName, formatter.GetFormattedText(), importExportProgressBar, progressBarLabel);
 
-                SetActionButtonsState(true);
                 statusLabel.ForeColor = Color.Green;
                 statusLabel.Text = "Soubor v poøádku uložen!";
+                ResetProgressBarAndLabel();
             }
             catch (OperationCanceledException)
             {
                 statusLabel.ForeColor = Color.Red;
                 statusLabel.Text = "Operace byla zrušena.";
-                SetActionButtonsState(false);
+                ResetProgressBarAndLabel();
             }
             catch (Exception ex)
             {
                 statusLabel.ForeColor = Color.Red;
                 statusLabel.Text = ex.Message;
-                SetActionButtonsState(false);
             }
             finally
             {
                 cts.Dispose();
                 cancelButton.Enabled = false;
+                SetActionButtonsState(true);
             }
         }
 
@@ -187,7 +194,6 @@ namespace TextEditor
                 statusLabel.ForeColor = Color.Black;
                 statusLabel.Text = "Odstraòuji prázdné øádky...";
                 await Task.Run(() => formatter.RemoveEmptyRows(cts.Token));
-                SetActionButtonsState(true);
                 statusLabel.ForeColor = Color.Green;
                 statusLabel.Text = "Prázdné øádky odstranìny!";
 
@@ -197,19 +203,20 @@ namespace TextEditor
 
                 statusLabel.ForeColor = Color.Red;
                 statusLabel.Text = "Operace byla zrušena!";
-                SetActionButtonsState(false);
+                ResetProgressBarAndLabel();
             }
             catch (Exception ex)
             {
                 statusLabel.ForeColor = Color.Red;
                 statusLabel.Text = ex.Message;
-                SetActionButtonsState(false);
+                ResetProgressBarAndLabel();
             }
             finally
             {
                 cts.Dispose();
                 cancelButton.Enabled = false;
                 UpdateCounterLabels();
+                SetActionButtonsState(true);
 
             }
         }
@@ -221,7 +228,8 @@ namespace TextEditor
             if (!string.IsNullOrEmpty(formatter.Text) && OpenFileDialog.FileName == importPathTextBox.Text)
             {
                 formatter.CopyImportedText();
-
+                importExportProgressBar.Value = 100;
+                progressBarLabel.Text = "100%";
                 SetActionButtonsState(true);
                 statusLabel.ForeColor = Color.Green;
                 statusLabel.Text = "Soubor pøekopírován!";
@@ -265,6 +273,7 @@ namespace TextEditor
                     statusLabel.ForeColor = Color.Red;
                     statusLabel.Text = "Operace byla zrušena!";
                     SetActionButtonsState(false);
+                    ResetProgressBarAndLabel();
                 }
                 catch (Exception ex)
                 {
@@ -273,6 +282,7 @@ namespace TextEditor
                     formatter.SetText(string.Empty);
                     saveFileButton.Enabled = false;
                     SetActionButtonsState(false);
+                    ResetProgressBarAndLabel();
                 }
                 finally
                 {
@@ -297,7 +307,6 @@ namespace TextEditor
                 statusLabel.ForeColor = Color.Black;
                 statusLabel.Text = "Odstraòuji diakritiku...";
                 await Task.Run(() => formatter.RemoveDiacritic(cts.Token));
-                SetActionButtonsState(true);
                 statusLabel.ForeColor = Color.Green;
                 statusLabel.Text = "Diakritika odstranìna!";
 
@@ -307,18 +316,19 @@ namespace TextEditor
 
                 statusLabel.ForeColor = Color.Red;
                 statusLabel.Text = "Operace byla zrušena!";
-                SetActionButtonsState(false);
+                ResetProgressBarAndLabel();
             }
             catch (Exception ex)
             {
                 statusLabel.ForeColor = Color.Red;
                 statusLabel.Text = ex.Message;
-                SetActionButtonsState(false);
+                ResetProgressBarAndLabel();
             }
             finally
             {
                 cts.Dispose();
                 cancelButton.Enabled = false;
+                SetActionButtonsState(true);
             }
             UpdateCounterLabels();
         }
@@ -335,7 +345,6 @@ namespace TextEditor
                 statusLabel.ForeColor = Color.Black;
                 statusLabel.Text = "Odstraòuji mezery a interpunkci, implementuji CamelCase notaci na slova...";
                 await Task.Run(() => formatter.RemoveSpacesAndPunctuation(cts.Token));
-                SetActionButtonsState(true);
                 statusLabel.ForeColor = Color.Green;
                 statusLabel.Text = "Mezery a interpunkce odstranìna a slova pøetransformována na CamelCase!";
 
@@ -344,18 +353,19 @@ namespace TextEditor
             {
                 statusLabel.ForeColor = Color.Red;
                 statusLabel.Text = "Operace byla zrušena!";
-                SetActionButtonsState(false);
+                ResetProgressBarAndLabel();
             }
             catch (Exception ex)
             {
                 statusLabel.ForeColor = Color.Red;
                 statusLabel.Text = ex.Message;
-                SetActionButtonsState(false);
+                ResetProgressBarAndLabel();
             }
             finally
             {
                 cts.Dispose();
                 cancelButton.Enabled = false;
+                SetActionButtonsState(true);
             }
             UpdateCounterLabels();
         }
@@ -373,10 +383,6 @@ namespace TextEditor
             {
                 statusLabel.Text = "Žádný proces";
             }
-
-            // Process was cancelled, set progressBar to 0
-            importExportProgressBar.Value = 0;
-            progressBarLabel.Text = "0%";
         }
 
         // Removing events and close form

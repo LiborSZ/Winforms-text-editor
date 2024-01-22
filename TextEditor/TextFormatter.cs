@@ -53,7 +53,7 @@ namespace TextEditor
 
             // loop is done, progressbar should be on 100%
             ProgressChanged?.Invoke(100);
-            FormattedText = sbReturn.ToString();
+            FormattedText = sbReturn.ToString().TrimEnd('\r', '\n');
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace TextEditor
         /// <returns></returns>
         public int GetWordsCount()
         {
-            return FormattedText.Split(new char[] { '.', ' ' }, StringSplitOptions.RemoveEmptyEntries).Length;
+            return FormattedText.Split(new char[] { ' ', '.', ',' }, StringSplitOptions.RemoveEmptyEntries).Length;
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace TextEditor
         /// <returns></returns>
         public int GetSentencesCount()
         {
-            return FormattedText.Split(new char[] { '.', '?', '!' }, StringSplitOptions.RemoveEmptyEntries).Length;
+            return FormattedText.TrimEnd('\r', '\n').Split(new char[] { '.', '?', '!' }, StringSplitOptions.RemoveEmptyEntries).Length;
         }
 
         /// <summary>
@@ -166,8 +166,7 @@ namespace TextEditor
         /// <returns></returns>
         public int GetCharsCount()
         {
-            var charsLenght = FormattedText.Select(s => s).ToList().Count;
-            return charsLenght;
+            return FormattedText.Where(s=> s.ToString() != "\r" && s.ToString() != "\n").Select(s => s).ToList().Count;
         }
 
         /// <summary>

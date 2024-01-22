@@ -303,8 +303,8 @@
             this.Controls.Add(this.removeEmptyRowsButton);
             this.Controls.Add(this.removeDiacriticButton);
             this.Controls.Add(this.copyButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "StatisticForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
