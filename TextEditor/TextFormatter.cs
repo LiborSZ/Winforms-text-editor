@@ -23,9 +23,9 @@ namespace TextEditor
         }
 
         /// <summary>
-        /// 
+        /// Removes empty rows from text
         /// </summary>
-        /// <param name="cancellationToken">indicates if cancel button was clicked</param>
+        /// <param name="cancellationToken">Indicates if cancel button was clicked</param>
         public void RemoveEmptyRows(CancellationToken cancellationToken)
         {
             // split string by lines
@@ -59,6 +59,7 @@ namespace TextEditor
         /// <summary>
         /// Removes diacritic from text
         /// </summary>
+        /// <param name="cancellationToken">Indicates if cancel button was clicked</param>
         public void RemoveDiacritic(CancellationToken cancellationToken)
         {
             StringBuilder sbReturn = new StringBuilder();
@@ -92,8 +93,9 @@ namespace TextEditor
         }
 
         /// <summary>
-        /// Removes all empty spaces, punction and transform text into CamelCase notation
+        /// Removes spaces and punctation, transform words to CamelCase
         /// </summary>
+        /// <param name="cancellationToken">Indicates if cancel button was clicked</param>
         public void RemoveSpacesAndPunctuation(CancellationToken cancellationToken)
         {
 

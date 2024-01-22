@@ -54,7 +54,7 @@ namespace TextEditor
         /// <summary>
         /// Sets action buttons to disabled or enabled state
         /// </summary>
-        /// <param name="enabled"></param>
+        /// <param name="enabled">enabled or disabled</param>
         private void SetActionButtonsState(bool enabled)
         {
             removeDiacriticButton.Enabled = enabled;
