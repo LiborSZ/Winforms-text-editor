@@ -1,3 +1,10 @@
+using System;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
 namespace TextEditor
 {
     public partial class StatisticForm : Form
@@ -14,7 +21,7 @@ namespace TextEditor
             cts = null;
 
             // Events bounds to progress bar
-            FileHandler.ProgressChanged += ProgressBar_ProgressChanged; 
+            FileHandler.ProgressChanged += ProgressBar_ProgressChanged;
             TextFormatter.ProgressChanged += ProgressBar_ProgressChanged;
 
             // labels and buttons setting inicialization
@@ -290,7 +297,7 @@ namespace TextEditor
                     cancelButton.Enabled = false;
                 }
             }
-           
+
             UpdateCounterLabels();
 
         }

@@ -1,4 +1,6 @@
-﻿namespace TextEditor
+﻿using System.Windows.Forms;
+
+namespace TextEditor
 {
     partial class StatisticForm
     {

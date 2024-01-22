@@ -1,5 +1,8 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace TextEditor
 {
@@ -168,7 +171,7 @@ namespace TextEditor
         /// <returns></returns>
         public int GetCharsCount()
         {
-            return FormattedText.Where(s=> s.ToString() != "\r" && s.ToString() != "\n").Select(s => s).ToList().Count;
+            return FormattedText.Where(s => s.ToString() != "\r" && s.ToString() != "\n").Select(s => s).ToList().Count;
         }
 
         /// <summary>
@@ -197,6 +200,5 @@ namespace TextEditor
         {
             FormattedText = Text;
         }
-
     }
 }
